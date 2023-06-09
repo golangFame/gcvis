@@ -3,7 +3,7 @@
 //
 // usage:
 //
-//     gcvis program [arguments]...
+//	gcvis program [arguments]...
 package main
 
 import (
@@ -49,7 +49,7 @@ func main() {
 	parser := NewParser(pipeRead)
 
 	title := strings.Join(flag.Args(), " ")
-	if len(title) == 0 {
+	if title == "" {
 		title = fmt.Sprintf("%s:%s", *iface, *port)
 	}
 
