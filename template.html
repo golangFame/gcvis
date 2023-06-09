@@ -6,30 +6,6 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.selection.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.stack.min.js"></script>
 
-<style>
-
-	/*Disable Force Dark Page in opera*/
-	*{
-		font-family: "Fira Code", fallback_font, sans-serif;
-		font-size: 1em;
-	}
-
-	/* Apply styles for the default or light color scheme */
-	body {
-		background-color: violet;
-		color: whitesmoke;
-	}
-
-	@media (prefers-color-scheme: dark) {
-		/* Apply styles for dark color scheme */
-		body {
-			background-color: darkcyan;
-			color: #fff;
-		}
-	}
-
-</style>
-
 <script type="text/javascript">
 
 
@@ -238,7 +214,32 @@
 	});
 })();
 </script>
+
 <style>
+
+	* {
+		font-family: "Fira Code", fallback_font, sans-serif;
+		font-size: 1em;
+	}
+
+
+	/*Disable Force Dark Page in opera*/
+	@media (prefers-color-scheme: dark) {
+		/* Apply styles for dark color scheme */
+		body {
+			background-color: darkcyan;
+			color: #fff;
+		}
+	}
+
+	/*@media (prefers-color-scheme: light) {*/
+	/*	body {*/
+	/*		background-color: violet;*/
+	/*		color: whitesmoke;*/
+	/*	}*/
+	/*}*/
+
+
 #content {
 	margin: 0 auto;
 	padding: 10px;
