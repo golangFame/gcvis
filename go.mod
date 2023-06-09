@@ -12,6 +12,4 @@ require (
 	golang.org/x/term v0.8.0 // indirect
 )
 
-retract (
-	v1.0-alpha
-)
+retract v0.0.0-20230609011628-8a2f6497eae1 // template file discovered in runtime only
