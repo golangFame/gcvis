@@ -11,3 +11,7 @@ require (
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/term v0.8.0 // indirect
 )
+
+retract (
+	v1.0-alpha
+)
