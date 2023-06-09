@@ -1,2 +1,5 @@
 gcvis
 examples/gcvis
+.idea/
+bin/
+*.out

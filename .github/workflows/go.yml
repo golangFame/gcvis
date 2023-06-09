@@ -1,0 +1,32 @@
+name: Go Test
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          cache-dependency-path: go.sum
+          go-version-file: go.mod
+          check-latest: true
+
+      - name: Linter
+        run: make lint-prepare && make lint
+
+      - name: Test
+        run: make test
