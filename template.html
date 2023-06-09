@@ -1,4 +1,4 @@
-<html>
+<html lang="en">
 <head>
 <title>gcvis - {{ .Title }}</title>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -9,18 +9,24 @@
 <style>
 
 	/*Disable Force Dark Page in opera*/
+	*{
+		font-family: "Fira Code", fallback_font, sans-serif;
+		font-size: 1em;
+	}
+
+	/* Apply styles for the default or light color scheme */
+	body {
+		background-color: violet;
+		color: whitesmoke;
+	}
 
 	@media (prefers-color-scheme: dark) {
+		/* Apply styles for dark color scheme */
 		body {
-			filter: invert(100%) hue-rotate(180deg);
-			background-color: #fff;
-		}
-		img:not([src*=".svg"]), video {
-			filter: invert(100%) hue-rotate(180deg);
+			background-color: darkcyan;
+			color: #fff;
 		}
 	}
-	<style>
-
 
 </style>
 
