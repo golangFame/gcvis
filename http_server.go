@@ -36,7 +36,7 @@ func (h *HttpServer) Start() {
 		h.graph.Write(w)
 	})
 
-	serveMux.HandleFunc("/graph.json", func(w http.ResponseWriter, req *http.Request) {
+	serveMux.HandleFunc("/graph", func(w http.ResponseWriter, req *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		encoder := json.NewEncoder(w)
 		if err := encoder.Encode(h.graph); err != nil {
