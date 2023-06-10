@@ -59,9 +59,9 @@ jobs:
           restore-keys: |
             ${{ github.workflow }}-${{ runner.os }}-${{ matrix.arch }}-go-${{matrix.go-version}}-${{ hashFiles('**/go.mod','*_test.go') }}
 
-      - name: Go mod download for before go1.16 versions
-        run:
-          go get
+#      - name: Go mod download for before go1.16 versions
+#        run:
+#          go get
 
 
       - name: Linter

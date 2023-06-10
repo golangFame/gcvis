@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"strings"
 	"testing"
 )
@@ -68,12 +67,13 @@ func TestHttpServerJsonEndpoint(t *testing.T) {
 	go server.Start()
 	defer server.Close()
 
-	jsonEndpoint, err := url.JoinPath(server.Url(), "graph")
+	/*jsonEndpoint, err := url.JoinPath(server.Url(), "graph")
 
 	if err != nil {
 		t.Fatal("error building jsonEndpoint")
 	}
-
+	*/
+	jsonEndpoint := server.Url() + "graph"
 	response, err := http.Get(jsonEndpoint)
 
 	if err != nil {
