@@ -46,6 +46,11 @@ func main() {
 		go subcommand.Run()
 	}
 
+	if subcommand != nil && subcommand.Err() != nil {
+		fmt.Fprintf(os.Stderr, subcommand.Err().Error())
+		os.Exit(1)
+	}
+
 	parser := NewParser(pipeRead)
 
 	title := strings.Join(flag.Args(), " ")
@@ -81,14 +86,8 @@ func main() {
 				fmt.Fprintf(os.Stderr, parser.Err.Error())
 				os.Exit(1)
 			}
-
 			os.Exit(0)
 		}
-	}
-
-	if subcommand != nil && subcommand.Err() != nil {
-		fmt.Fprintf(os.Stderr, subcommand.Err().Error())
-		os.Exit(1)
 	}
 
 	os.Exit(0)
