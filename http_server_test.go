@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 	"testing"
 )
@@ -67,7 +68,14 @@ func TestHttpServerJsonEndpoint(t *testing.T) {
 	go server.Start()
 	defer server.Close()
 
-	response, err := http.Get(server.Url() + "graph.json")
+	jsonEndpoint, err := url.JoinPath(server.Url(), "graph")
+
+	if err != nil {
+		t.Fatal("error building jsonEndpoint")
+	}
+
+	response, err := http.Get(jsonEndpoint)
+
 	if err != nil {
 		t.Errorf("HTTP request returned an error: %v", err)
 	}
