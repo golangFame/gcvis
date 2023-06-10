@@ -4,3 +4,4 @@ examples/gcvis
 bin/
 *.out
 tmp/
+.DS_Store
