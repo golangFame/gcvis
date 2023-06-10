@@ -18,7 +18,7 @@ jobs:
   build:
     strategy:
       matrix:
-        go-version: [ '1.17.x','1.18.x', '1.19.x', '1.20.x']
+        go-version: ['1.13.x',1.14.x','1.15.x', '1.16.x','1.17.x','1.18.x', '1.19.x', '1.20.x']
         arch: [ x64, arm, arm64 ]
         os: [ macos-latest, ubuntu-latest ] #windows-latest
 
@@ -58,6 +58,10 @@ jobs:
           key: ${{ github.workflow }}-${{ runner.os }}-${{ matrix.arch }}-go-${{matrix.go-version}}-${{ hashFiles('**/go.mod','*_test.go') }}
           restore-keys: |
             ${{ github.workflow }}-${{ runner.os }}-${{ matrix.arch }}-go-${{matrix.go-version}}-${{ hashFiles('**/go.mod','*_test.go') }}
+
+      - name: Go mod download for before go1.16 versions
+        run:
+          go get
 
 
       - name: Linter
