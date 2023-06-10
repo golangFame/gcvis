@@ -3,7 +3,7 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-  args_bin = ["-p 1602", "godoc -index -http=:6060"]
+  args_bin = ["-p 1602","-o=false", "godoc -index"]
   bin = "./tmp/main"
   cmd = "go build -o ./tmp/main ."
   delay = 1000

@@ -3,3 +3,4 @@ examples/gcvis
 .idea/
 bin/
 *.out
+tmp/
