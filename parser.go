@@ -4,23 +4,30 @@ import (
 	"bufio"
 	"io"
 	"regexp"
+	"runtime"
 	"strconv"
 )
 
 const (
 	GCRegexpGo14 = `gc\d+\(\d+\): ([\d.]+\+?)+ us, \d+ -> (?P<Heap1>\d+) MB, \d+ \(\d+-\d+\) objects,( \d+ goroutines,)? \d+\/\d+\/\d+ sweeps, \d+\(\d+\) handoff, \d+\(\d+\) steal, \d+\/\d+\/\d+ yields`
-	GCRegexpGo15 = `gc #?\d+ @(?P<ElapsedTime>[\d.]+)s \d+%: [\d.+/]+ ms clock, [\d.+/]+ ms cpu, \d+->\d+->\d+ MB, (?P<Heap1>\d+) MB goal, \d+ P`
-	GCRegexpGo16 = `gc #?\d+ @(?P<ElapsedTime>[\d.]+)s \d+%: (?P<STWSclock>[^+]+)\+(?P<MASclock>[^+]+)\+(?P<STWMclock>[^+]+) ms clock, (?P<STWScpu>[^+]+)\+(?P<MASAssistcpu>[^+]+)/(?P<MASBGcpu>[^+]+)/(?P<MASIdlecpu>[^+]+)\+(?P<STWMcpu>[^+]+) ms cpu, \d+->\d+->\d+ MB, (?P<Heap1>\d+) MB goal, \d+ P`
 
 	SCVGRegexp = `scvg\d+: inuse: (?P<inuse>\d+), idle: (?P<idle>\d+), sys: (?P<sys>\d+), released: (?P<released>\d+), consumed: (?P<consumed>\d+) \(MB\)`
 )
 
+/*var gcRegex = map[string]string{
+	"go1.14.x": GCRegexpGo14,
+	"go1.15.x": GCRegexpGo15,
+	"go1.16.x": GCRegexpGo16,
+}*/
+
 var (
-	gcrego14 = regexp.MustCompile(GCRegexpGo14)
-	gcrego15 = regexp.MustCompile(GCRegexpGo15)
-	gcrego16 = regexp.MustCompile(GCRegexpGo16)
-	scvgre   = regexp.MustCompile(SCVGRegexp)
+	scvgre = regexp.MustCompile(SCVGRegexp)
 )
+
+func init() {
+	runtime.Version()
+
+}
 
 type Parser struct {
 	reader      io.Reader
@@ -49,18 +56,9 @@ func (p *Parser) Run() {
 
 	for sc.Scan() {
 		line := sc.Text()
-		if result := gcrego16.FindStringSubmatch(line); result != nil {
-			p.GcChan <- parseGCTrace(gcrego16, result)
-			continue
-		}
 
-		if result := gcrego15.FindStringSubmatch(line); result != nil {
-			p.GcChan <- parseGCTrace(gcrego15, result)
-			continue
-		}
-
-		if result := gcrego14.FindStringSubmatch(line); result != nil {
-			p.GcChan <- parseGCTrace(gcrego14, result)
+		if result := gcRegex.FindStringSubmatch(line); result != nil {
+			p.GcChan <- parseGCTrace(gcRegex, result)
 			continue
 		}
 
