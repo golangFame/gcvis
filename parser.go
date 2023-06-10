@@ -4,13 +4,10 @@ import (
 	"bufio"
 	"io"
 	"regexp"
-	"runtime"
 	"strconv"
 )
 
 const (
-	GCRegexpGo14 = `gc\d+\(\d+\): ([\d.]+\+?)+ us, \d+ -> (?P<Heap1>\d+) MB, \d+ \(\d+-\d+\) objects,( \d+ goroutines,)? \d+\/\d+\/\d+ sweeps, \d+\(\d+\) handoff, \d+\(\d+\) steal, \d+\/\d+\/\d+ yields`
-
 	SCVGRegexp = `scvg\d+: inuse: (?P<inuse>\d+), idle: (?P<idle>\d+), sys: (?P<sys>\d+), released: (?P<released>\d+), consumed: (?P<consumed>\d+) \(MB\)`
 )
 
@@ -20,14 +17,7 @@ const (
 	"go1.16.x": GCRegexpGo16,
 }*/
 
-var (
-	scvgre = regexp.MustCompile(SCVGRegexp)
-)
-
-func init() {
-	runtime.Version()
-
-}
+var scvgre = regexp.MustCompile(SCVGRegexp)
 
 type Parser struct {
 	reader      io.Reader

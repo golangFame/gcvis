@@ -7,6 +7,6 @@ import (
 	"regexp"
 )
 
-const GCRegexExp = `gc #?\d+ @(?P<ElapsedTime>[\d.]+)s \d+%: [\d.+/]+ ms clock, [\d.+/]+ ms cpu, \d+->\d+->\d+ MB, (?P<Heap1>\d+) MB goal, \d+ P`
+const GCRegexExp = `gc\d+\(\d+\): ([\d.]+\+?)+ us, \d+ -> (?P<Heap1>\d+) MB, \d+ \(\d+-\d+\) objects,( \d+ goroutines,)? \d+\/\d+\/\d+ sweeps, \d+\(\d+\) handoff, \d+\(\d+\) steal, \d+\/\d+\/\d+ yields`
 
 var gcRegex = regexp.MustCompile(GCRegexExp)
