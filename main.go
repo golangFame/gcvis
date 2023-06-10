@@ -44,11 +44,11 @@ func main() {
 		subcommand = NewSubCommand(flag.Args())
 		pipeRead = subcommand.PipeRead
 		go subcommand.Run()
-	}
 
-	if subcommand != nil && subcommand.Err() != nil {
-		fmt.Fprintf(os.Stderr, subcommand.Err().Error())
-		os.Exit(1)
+		if subcommand.Err() != nil {
+			fmt.Fprintf(os.Stderr, subcommand.Err().Error())
+			os.Exit(1)
+		}
 	}
 
 	parser := NewParser(pipeRead)
