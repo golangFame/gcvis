@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io/ioutil"
+	"io"
 	"strings"
 	"testing"
 	"time"
@@ -15,7 +15,7 @@ func TestSubCommandPipeRead(t *testing.T) {
 	go func() {
 		subcommand.Run()
 
-		content, err := ioutil.ReadAll(subcommand.PipeRead)
+		content, err := io.ReadAll(subcommand.PipeRead)
 		if err != nil {
 			t.Fatalf("ReadAll returned an error: %v", err)
 		}
@@ -43,7 +43,7 @@ func TestSubCommandFail(t *testing.T) {
 	go func() {
 		subcommand.Run()
 
-		content, err := ioutil.ReadAll(subcommand.PipeRead)
+		content, err := io.ReadAll(subcommand.PipeRead)
 		if err != nil {
 			t.Fatalf("ReadAll returned an error: %v", err)
 		}

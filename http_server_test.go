@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -34,7 +34,7 @@ func TestHttpServerResponse(t *testing.T) {
 	}
 	defer response.Body.Close()
 
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		t.Errorf("Error while reading response body: %v", err)
 	}
@@ -45,7 +45,7 @@ func TestHttpServerResponse(t *testing.T) {
 		t.Errorf("Error while writing template: %v", err)
 	}
 
-	expectedBody, err := ioutil.ReadAll(w)
+	expectedBody, err := io.ReadAll(w)
 	if err != nil {
 		t.Errorf("Error while reading buffer: %v", err)
 	}
@@ -81,7 +81,7 @@ func TestHttpServerJsonEndpoint(t *testing.T) {
 	}
 	defer response.Body.Close()
 
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		t.Errorf("Error while reading response body: %v", err)
 	}
