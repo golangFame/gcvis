@@ -1,30 +1,23 @@
-package main
+package parser
 
 import (
 	"bufio"
+	"github.com/golangFame/gcvis/pkg/trace"
 	"io"
 	"regexp"
 	"strconv"
 )
 
-const (
-	SCVGRegexp = `scvg\d+: inuse: (?P<inuse>\d+), idle: (?P<idle>\d+), sys: (?P<sys>\d+), released: (?P<released>\d+), consumed: (?P<consumed>\d+) \(MB\)`
-)
+const SCVGRegexp = `scvg\d+: inuse: (?P<inuse>\d+), idle: (?P<idle>\d+), sys: (?P<sys>\d+), released: (?P<released>\d+), consumed: (?P<consumed>\d+) \(MB\)`
 
-/*var gcRegex = map[string]string{
-	"go1.14.x": GCRegexpGo14,
-	"go1.15.x": GCRegexpGo15,
-	"go1.16.x": GCRegexpGo16,
-}*/
-
-var scvgre = regexp.MustCompile(SCVGRegexp)
+var svgRegExp = regexp.MustCompile(SCVGRegexp)
 
 type Parser struct {
 	reader      io.Reader
-	GcChan      chan *gctrace
-	ScvgChan    chan *scvgtrace
+	GcChan      chan *trace.Gctrace
+	ScvgChan    chan *trace.Scvgtrace
 	NoMatchChan chan string
-	done        chan bool
+	Done        chan bool
 
 	Err error
 
@@ -34,10 +27,10 @@ type Parser struct {
 func NewParser(r io.Reader) *Parser {
 	return &Parser{
 		reader:      r,
-		GcChan:      make(chan *gctrace, 1),
-		ScvgChan:    make(chan *scvgtrace, 1),
+		GcChan:      make(chan *trace.Gctrace, 1),
+		ScvgChan:    make(chan *trace.Scvgtrace, 1),
 		NoMatchChan: make(chan string, 1),
-		done:        make(chan bool),
+		Done:        make(chan bool),
 	}
 }
 
@@ -52,7 +45,7 @@ func (p *Parser) Run() {
 			continue
 		}
 
-		if result := scvgre.FindStringSubmatch(line); result != nil {
+		if result := svgRegExp.FindStringSubmatch(line); result != nil {
 			p.ScvgChan <- parseSCVGTrace(result)
 			continue
 		}
@@ -62,13 +55,13 @@ func (p *Parser) Run() {
 
 	p.Err = sc.Err()
 
-	close(p.done)
+	close(p.Done)
 }
 
-func parseGCTrace(gcre *regexp.Regexp, matches []string) *gctrace {
+func parseGCTrace(gcre *regexp.Regexp, matches []string) *trace.Gctrace {
 	matchMap := getMatchMap(gcre, matches)
 
-	return &gctrace{
+	return &trace.Gctrace{
 		Heap1:        silentParseInt(matchMap["Heap1"]),
 		ElapsedTime:  silentParseFloat(matchMap["ElapsedTime"]),
 		STWSclock:    silentParseFloat(matchMap["STWSclock"]),
@@ -82,15 +75,15 @@ func parseGCTrace(gcre *regexp.Regexp, matches []string) *gctrace {
 	}
 }
 
-func parseSCVGTrace(matches []string) *scvgtrace {
-	matchMap := getMatchMap(scvgre, matches)
+func parseSCVGTrace(matches []string) *trace.Scvgtrace {
+	matchMap := getMatchMap(svgRegExp, matches)
 
-	return &scvgtrace{
-		inuse:    silentParseInt(matchMap["inuse"]),
-		idle:     silentParseInt(matchMap["idle"]),
-		sys:      silentParseInt(matchMap["sys"]),
-		released: silentParseInt(matchMap["released"]),
-		consumed: silentParseInt(matchMap["consumed"]),
+	return &trace.Scvgtrace{
+		Inuse:    silentParseInt(matchMap["inuse"]),
+		Idle:     silentParseInt(matchMap["idle"]),
+		Sys:      silentParseInt(matchMap["sys"]),
+		Released: silentParseInt(matchMap["released"]),
+		Consumed: silentParseInt(matchMap["consumed"]),
 	}
 }
 

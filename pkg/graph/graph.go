@@ -1,6 +1,7 @@
-package main
+package graph
 
 import (
+	"github.com/golangFame/gcvis/pkg/trace"
 	"html/template"
 	"io"
 	"sync"
@@ -60,7 +61,7 @@ func (g *Graph) Write(w io.Writer) error {
 	return g.Tmpl.Execute(w, g)
 }
 
-func (g *Graph) AddGCTraceGraphPoint(gcTrace *gctrace) {
+func (g *Graph) AddGCTraceGraphPoint(gcTrace *trace.Gctrace) {
 	g.mu.RLock()
 	defer g.mu.RUnlock()
 	var elapsedTime float64
@@ -80,7 +81,7 @@ func (g *Graph) AddGCTraceGraphPoint(gcTrace *gctrace) {
 	g.STWMcpu = append(g.STWMcpu, graphPoints{elapsedTime, float64(gcTrace.STWMcpu)})
 }
 
-func (g *Graph) AddScavengerGraphPoint(scvg *scvgtrace) {
+func (g *Graph) AddScavengerGraphPoint(scvg *trace.Scvgtrace) {
 	g.mu.RLock()
 	defer g.mu.RUnlock()
 	var elapsedTime float64
@@ -89,9 +90,9 @@ func (g *Graph) AddScavengerGraphPoint(scvg *scvgtrace) {
 	} else {
 		elapsedTime = scvg.ElapsedTime
 	}
-	g.ScvgInuse = append(g.ScvgInuse, graphPoints{elapsedTime, float64(scvg.inuse)})
-	g.ScvgIdle = append(g.ScvgIdle, graphPoints{elapsedTime, float64(scvg.idle)})
-	g.ScvgSys = append(g.ScvgSys, graphPoints{elapsedTime, float64(scvg.sys)})
-	g.ScvgReleased = append(g.ScvgReleased, graphPoints{elapsedTime, float64(scvg.released)})
-	g.ScvgConsumed = append(g.ScvgConsumed, graphPoints{elapsedTime, float64(scvg.consumed)})
+	g.ScvgInuse = append(g.ScvgInuse, graphPoints{elapsedTime, float64(scvg.Inuse)})
+	g.ScvgIdle = append(g.ScvgIdle, graphPoints{elapsedTime, float64(scvg.Idle)})
+	g.ScvgSys = append(g.ScvgSys, graphPoints{elapsedTime, float64(scvg.Sys)})
+	g.ScvgReleased = append(g.ScvgReleased, graphPoints{elapsedTime, float64(scvg.Released)})
+	g.ScvgConsumed = append(g.ScvgConsumed, graphPoints{elapsedTime, float64(scvg.Consumed)})
 }

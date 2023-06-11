@@ -5,7 +5,7 @@ package main
 
 	runParserWith(line)
 
-	expectedGCTrace := &gctrace{
+	expectedGCTrace := &Gctrace{
 		Heap1:       33,
 		ElapsedTime: 3.243,
 	}
@@ -25,7 +25,7 @@ func TestParserWithMatchingInputGo14(t *testing.T) {
 
 	runParserWith(line)
 
-	expectedGCTrace := &gctrace{
+	expectedGCTrace := &Gctrace{
 		Heap1: 3,
 	}
 
@@ -44,7 +44,7 @@ func TestParserWithMatchingInputGo14(t *testing.T) {
 
 	runParserWith(line)
 
-	expectedGCTrace := &gctrace{
+	expectedGCTrace := &Gctrace{
 		Heap1: 3,
 	}
 

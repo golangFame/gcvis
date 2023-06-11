@@ -9,6 +9,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	parser2 "github.com/golangFame/gcvis/internal/parser"
+	server2 "github.com/golangFame/gcvis/internal/server"
+	"github.com/golangFame/gcvis/pkg/graph"
 	"io"
 	"log"
 	"os"
@@ -51,15 +54,15 @@ func main() {
 		}
 	}
 
-	parser := NewParser(pipeRead)
+	parser := parser2.NewParser(pipeRead)
 
 	title := strings.Join(flag.Args(), " ")
 	if title == "" {
 		title = fmt.Sprintf("%s:%s", *iface, *port)
 	}
 
-	gcvisGraph := NewGraph(title, GCVIS_TMPL)
-	server := NewHttpServer(*iface, *port, &gcvisGraph)
+	gcvisGraph := graph.NewGraph(title, graph.GCVIS_TMPL)
+	server := server2.NewHttpServer(*iface, *port, &gcvisGraph)
 
 	go parser.Run()
 	go server.Start()
@@ -81,7 +84,7 @@ func main() {
 			gcvisGraph.AddScavengerGraphPoint(scvgTrace)
 		case output := <-parser.NoMatchChan:
 			fmt.Fprintln(os.Stderr, output)
-		case <-parser.done:
+		case <-parser.Done:
 			if parser.Err != nil {
 				fmt.Fprintf(os.Stderr, parser.Err.Error())
 				os.Exit(1)

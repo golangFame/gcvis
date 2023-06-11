@@ -1,8 +1,10 @@
-package main
+package server
 
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/golangFame/gcvis/pkg/graph"
+	"github.com/golangFame/gcvis/pkg/trace"
 	"io"
 	"net/http"
 	"strings"
@@ -10,7 +12,7 @@ import (
 )
 
 func TestHttpServerListener(t *testing.T) {
-	graph := NewGraph("fake title", GCVIS_TMPL)
+	graph := graph.NewGraph("fake title", graph.GCVIS_TMPL)
 	server := NewHttpServer("127.0.0.1", "0", &graph)
 
 	url := server.Url()
@@ -21,8 +23,8 @@ func TestHttpServerListener(t *testing.T) {
 }
 
 func TestHttpServerResponse(t *testing.T) {
-	graph := NewGraph("fake title", GCVIS_TMPL)
-	graph.AddGCTraceGraphPoint(&gctrace{})
+	graph := graph.NewGraph("fake title", graph.GCVIS_TMPL)
+	graph.AddGCTraceGraphPoint(&trace.Gctrace{})
 	server := NewHttpServer("127.0.0.1", "0", &graph)
 
 	go server.Start()
@@ -60,8 +62,8 @@ func TestHttpServerResponse(t *testing.T) {
 }
 
 func TestHttpServerJsonEndpoint(t *testing.T) {
-	graph := NewGraph("fake title", GCVIS_TMPL)
-	graph.AddGCTraceGraphPoint(&gctrace{Heap1: 10})
+	graph := graph.NewGraph("fake title", graph.GCVIS_TMPL)
+	graph.AddGCTraceGraphPoint(&trace.Gctrace{Heap1: 10})
 	server := NewHttpServer("127.0.0.1", "0", &graph)
 
 	go server.Start()

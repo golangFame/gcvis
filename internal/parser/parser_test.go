@@ -1,7 +1,8 @@
-package main
+package parser
 
 import (
 	"bytes"
+	"github.com/golangFame/gcvis/pkg/trace"
 	"reflect"
 	"testing"
 	"time"
@@ -21,7 +22,7 @@ func TestParserWithMatchingInputGo16(t *testing.T) {
 
 	runParserWith(line)
 
-	expectedGCTrace := &gctrace{
+	expectedGCTrace := &trace.Gctrace{
 		Heap1:        6533,
 		ElapsedTime:  77536.239,
 		STWSclock:    0.11,
@@ -49,12 +50,12 @@ func TestParserWithScvgLine(t *testing.T) {
 
 	runParserWith(line)
 
-	expectedScvgTrace := &scvgtrace{
-		inuse:    12,
-		idle:     13,
-		sys:      14,
-		released: 15,
-		consumed: 16,
+	expectedScvgTrace := &trace.Scvgtrace{
+		Inuse:    12,
+		Idle:     13,
+		Sys:      14,
+		Released: 15,
+		Consumed: 16,
 	}
 
 	select {
@@ -89,7 +90,7 @@ func TestParserWait(t *testing.T) {
 	parser := runParserWith(line)
 
 	select {
-	case <-parser.done:
+	case <-parser.Done:
 		return
 	case <-time.After(100 * time.Millisecond):
 		t.Fatalf("Execution timed out.")

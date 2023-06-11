@@ -1,8 +1,10 @@
-package main
+package server
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/golangFame/gcvis/pkg/graph"
+
 	"log"
 	"net"
 	"net/http"
@@ -11,7 +13,7 @@ import (
 )
 
 type HttpServer struct {
-	graph    *Graph
+	graph    *graph.Graph
 	listener net.Listener
 	iface    string
 	port     string
@@ -19,7 +21,7 @@ type HttpServer struct {
 	listenerMtx sync.Mutex
 }
 
-func NewHttpServer(iface string, port string, graph *Graph) *HttpServer {
+func NewHttpServer(iface string, port string, graph *graph.Graph) *HttpServer {
 	h := &HttpServer{
 		graph: graph,
 		iface: iface,
